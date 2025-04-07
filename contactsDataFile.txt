@@ -1,8 +1,7 @@
 1,Grannie,1108478325,grannie22@gmail.com
-2,Wally,1133901287,whenrych6@gravatar.com
-3,Vannie,1129945349,vcolthard7@yale.edu
-4,Pamela,1125454565,pame@hotmail.com
-5,Carla,1155522352,carr23@gmail.com
-6,Maiky,1125456235,maikybebe@gmail.com.ar
-7,Marcelo,1155555555,null
+2,Vannie,1129945349,vcolthard7@yale.edu
+3,Carla,1155522352,carr23@gmail.com
+4,Ruby,1125465987,ruby@hotmail.com
+5,Uriel,1145236548,uri@gmail.com
+6,Maiky,1155426514,maiky@yahoo.com
 

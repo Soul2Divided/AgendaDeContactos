@@ -38,6 +38,15 @@ public class DataManager {
         writeCsv();
     }
 
+    private void reOrder() {
+        int i=1;
+
+        for (Contact c : contactsList) {
+            c.modifyId(i);
+            i++;
+        }
+    }
+
     public boolean addContact() {
         boolean success = true;
         String name;
@@ -61,6 +70,12 @@ public class DataManager {
         }
 
         email = addEmail();
+
+        if (email == null) {
+            success = false;
+            System.out.println("\nVolviendo al menu...\n");
+            return success;
+        }
 
         int lastId = readLastId();
 
@@ -177,6 +192,7 @@ public class DataManager {
         if (contactSearch != null) {
             contactsList.remove(contactPosition(contactSearch));
             System.out.println("El contacto " + contactSearch.getName() + " se ha eliminado correctamente.");
+            reOrder();
             writeCsv();
         } else {
             System.out.println("Ningun contacto tiene ese numero.");
