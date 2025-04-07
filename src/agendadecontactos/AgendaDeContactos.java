@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class AgendaDeContactos {
 
     public static void main(String[] args) {
-        File contactsFile = new File("AgendaDeContactos\\src\\agendadecontactos\\contactsDataFile.txt");
+        File contactsFile = new File(".\\contactsDataFile.txt");
         DataManager newList = new DataManager(contactsFile);
         Scanner kb = new Scanner(System.in);
         boolean loop = true;
