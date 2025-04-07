@@ -8,7 +8,7 @@ Funcionamientos requeridos:
  - Guardar informacion.
  - Leer informacion.
 
-TESTEAR Y CORREGIR ERRORES
+TESTEAR Y CORREGIR ERRORES 2.
  */
 package agendadecontactos;
 
