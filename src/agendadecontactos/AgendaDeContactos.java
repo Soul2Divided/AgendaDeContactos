@@ -8,17 +8,22 @@ Funcionamientos requeridos:
  - Guardar informacion.
  - Leer informacion.
 
-TESTEAR Y CORREGIR ERRORES 2.
+FALTAN ALGUNAS VALIDACIONES, COMO QUE NO SE REPITAN LOS CONTACTOS, PERO ME DIO VAGANCIA HACERLA.
+AGREGAR ALGUNA MANERA DE CANCELAR EL INGRESO DE DATOS (AÑADIR, MODIFICACION, ETC)
  */
 package agendadecontactos;
 
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ *
+ * @author gaby-
+ */
 public class AgendaDeContactos {
 
     public static void main(String[] args) {
-        File contactsFile = new File(".\\contactsDataFile.txt");
+        File contactsFile = new File("contactsDataFile.txt");
         DataManager newList = new DataManager(contactsFile);
         Scanner kb = new Scanner(System.in);
         boolean loop = true;
@@ -27,9 +32,8 @@ public class AgendaDeContactos {
         newList.dataCharge();
 
         while (loop) {
-            System.out.println("\n\n--- SELECCIONA UNA OPCION ---");
-            System.out.print(
-                    "[1] Ver lista de contactos\n[2] Agregar contacto\n[3] Eliminar contacto\n[4] Modificar contacto\n[0] Para cerrar el programa\n\n--> ");
+            System.out.println("--- SELECCIONA UNA OPCION ---");
+            System.out.print("[1] Ver lista de contactos\n[2] Agregar contacto\n[3] Eliminar contacto\n[4] Modificar contacto\n[0] Para cerrar el programa\n\n--> ");
             opt = kb.nextInt();
             kb.nextLine();
 
@@ -60,9 +64,6 @@ public class AgendaDeContactos {
                     System.out.println("Pulse [ENTER] para continuar");
                     kb.nextLine();
                     clearConsole();
-                    break;
-                case 5:
-                    newList.testing();
                     break;
                 default:
                     System.out.println("Numero incorrecto, intente nuevamente.\n");

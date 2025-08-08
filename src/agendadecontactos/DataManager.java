@@ -22,28 +22,15 @@ public class DataManager {
     }
 
     public void dataCharge() {
-        int j = 1;
         String rd = ffile.readFile();
         String[] jumpLine = rd.split("\n");
 
         if (!rd.isBlank()) {
             for (String contactData : jumpLine) {
                 String[] dataSplit = contactData.split(",");
-                Contact contactCharge = new Contact(j, dataSplit[1], dataSplit[2], dataSplit[3]);
-                j++;
+                Contact contactCharge = new Contact(Integer.parseInt(dataSplit[0]), dataSplit[1], dataSplit[2], dataSplit[3]);
                 contactsList.add(contactCharge);
             }
-        }
-
-        writeCsv();
-    }
-
-    private void reOrder() {
-        int i=1;
-
-        for (Contact c : contactsList) {
-            c.modifyId(i);
-            i++;
         }
     }
 
@@ -55,27 +42,9 @@ public class DataManager {
 
         name = addName();
 
-        if (name.isEmpty()) {
-            success = false;
-            System.out.println("\nVolviendo al menu...\n");
-            return success;
-        }
-
         cellphone = addCellphone();
 
-        if (cellphone == null) {
-            success = false;
-            System.out.println("\nVolviendo al menu...\n");
-            return success;
-        }
-
         email = addEmail();
-
-        if (email == null) {
-            success = false;
-            System.out.println("\nVolviendo al menu...\n");
-            return success;
-        }
 
         int lastId = readLastId();
 
@@ -93,18 +62,10 @@ public class DataManager {
 
         while (true) {
             try {
-                System.out.print("\nIngrese el nombre del contacto ([0] Para cancelar): ");
+                System.out.print("\nIngrese el nombre del contacto: ");
                 name = kb.nextLine();
-                if (goBack(name)) {
-                    return "";
-                }
                 if (!validateName(name)) {
-                    throw new RuntimeException(
-                            "El nombre no puede quedar vacio y debe contener mas de 3 letras.\nVuelva a intentar.");
-                }
-                if (!noNumbers(name)) {
-                    throw new RuntimeException(
-                            "El nombre no puede contener numeros ni caracteres especiales.\nVuelva a intentar.");
+                    throw new RuntimeException("El nombre no puede quedar vacio y debe contener mas de 3 letras.\nVuelva a intentar.");
                 }
                 break;
             } catch (RuntimeException e) {
@@ -112,29 +73,18 @@ public class DataManager {
             }
         }
 
-        name = capitalize(name);
-
         return name;
     }
 
     private String addCellphone() {
-        String cellphone = null;
-        boolean loop = true;
+        String cellphone;
 
-        while (loop) {
+        while (true) {
             try {
-                System.out.print(
-                        "\nIngrese el numero telefonico del contacto siguiendo el siguiente patron -> [11XXXXXXXX]: ");
+                System.out.print("\nIngrese el numero telefonico del contacto siguiendo el siguiente patron -> [11XXXXXXXX]: ");
                 cellphone = kb.nextLine();
                 if (!validateCellphone(cellphone)) {
-                    throw new RuntimeException(
-                            "Estructura del numero telefonico incorrecta.\nVuelva a intentar y recuerde que debe seguir el siguiente patron -> [11XXXXXXXX]");
-                }
-                if (!alreadyExist(cellphone)) {
-                    cellphone = null;
-                    loop = false;
-                    throw new RuntimeException(
-                            "Este numero telefonico ya esta asociado a un contacto.\nCancelando carga...\n");
+                    throw new RuntimeException("Estructura del numero telefonico incorrecta.\nVuelva a intentar y recuerde que debe seguir el siguiente patron -> [11XXXXXX]");
                 }
                 break;
             } catch (RuntimeException e) {
@@ -146,28 +96,21 @@ public class DataManager {
     }
 
     private String addEmail() {
-        String email = null;
-        boolean loop = true;
-
-        while (loop) {
+        String email;
+        
+        while (true) {
             try {
                 System.out.print("\nIngrese el email del contacto siguiendo la estructura basica: ");
                 email = kb.nextLine();
                 if (!validateEmail(email)) {
-                    throw new RuntimeException(
-                            "Estructura del email incorrecta.\nVuelva a intentar y recuerde que debe seguir la estructura basica de un email (ej: alguien@ejemplo.com): ");
-                }
-                if (!emailAlreadyExist(email)) {
-                    email = null;
-                    loop = false;
-                    throw new RuntimeException("Este email ya esta asociado a un contacto.\nCancelando carga...\n");
+                    throw new RuntimeException("Estructura del email incorrecta.\nVuelva a intentar y recuerde que debe seguir la estructura basica de un email (ej: alguien@ejemplo.com): ");
                 }
                 break;
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
         }
-
+        
         return email;
     }
 
@@ -177,22 +120,15 @@ public class DataManager {
         String contactToDelete;
 
         listContacts();
-
-        System.out.print("\nIntroduzca el numero del contacto que desea eliminar ([0] Para cancelar): ");
+        
+        System.out.print("\nIntroduzca el numero del contacto que desea eliminar: ");
         contactToDelete = kb.nextLine();
-
-        if (goBack(contactToDelete)) {
-            success = false;
-            System.out.println("\nVolviendo al menu...\n");
-            return success;
-        }
 
         contactSearch = searchContact(contactToDelete);
 
         if (contactSearch != null) {
             contactsList.remove(contactPosition(contactSearch));
             System.out.println("El contacto " + contactSearch.getName() + " se ha eliminado correctamente.");
-            reOrder();
             writeCsv();
         } else {
             System.out.println("Ningun contacto tiene ese numero.");
@@ -208,20 +144,14 @@ public class DataManager {
         String modify;
         int option = 0;
         int getPos = 0;
-
+        
         listContacts();
-
-        System.out.print("\nIntroduzca el numero del contacto que desea modificar ([0] Para cancelar): ");
+        
+        System.out.print("\nIntroduzca el numero del contacto que desea modificar: ");
         contactToModify = kb.nextLine();
 
-        if (goBack(contactToModify)) {
-            success = false;
-            System.out.println("\nVolviendo al menu...\n");
-            return success;
-        }
-
         contactSearch = searchContact(contactToModify);
-
+        
         if (contactSearch != null) {
             System.out.print("Seleccione el atributo a modificar:\n[1] Nombre\n[2] Telefono\n[3] Email\n\n--> ");
             option = kb.nextInt();
@@ -242,17 +172,20 @@ public class DataManager {
                     break;
             }
         }
-
+        
         writeCsv();
-
+        
         System.out.println("Contacto modificado con exito");
 
         return success;
     }
-
+    
     public void listContacts() {
+        int i = 1;
+        
         for (Contact c : contactsList) {
             System.out.println(c.toList() + "\n-----------");
+            i++;
         }
     }
 
@@ -265,23 +198,6 @@ public class DataManager {
 
         if (name.length() < 3) {
             success = false;
-        }
-
-        return success;
-    }
-
-    private boolean noNumbers(String name) {
-        boolean success = true;
-        String lowerName = name.toLowerCase();
-        String[] split = lowerName.split("");
-
-        for (int i = 0; i < name.length(); i++) {
-            String single = split[i];
-            int asciiValue = (int) single.charAt(0);
-            if (asciiValue < 97 || asciiValue > 122) {
-                success = false;
-                break;
-            }
         }
 
         return success;
@@ -303,33 +219,6 @@ public class DataManager {
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
-    }
-
-    private boolean emailAlreadyExist(String email) {
-        boolean exist = true;
-        boolean loop = true;
-
-        while (loop) {
-            for (Contact c : contactsList) {
-                if (c.getEmail().equalsIgnoreCase(email)) {
-                    exist = false;
-                    loop = false;
-                }
-            }
-            loop = false;
-        }
-
-        return exist;
-    }
-
-    private boolean alreadyExist(String cellphone) {
-        boolean exist = true;
-
-        if (searchContact(cellphone) != null) {
-            exist = false;
-        }
-
-        return exist;
     }
 
     private void writeCsv() {
@@ -366,47 +255,29 @@ public class DataManager {
 
         return contactFinded;
     }
-
+    
     private int contactPosition(Contact c) {
         int pos = 0;
-
+        
         for (int i = 0; i < contactsList.size(); i++) {
-            if (contactsList.get(i).getCellphone().equals(c.getCellphone())) {
+            if(contactsList.get(i).getCellphone().equals(c.getCellphone())) {
                 pos = i;
                 break;
             }
         }
-
+        
         return pos;
     }
 
-    private boolean goBack(String character) {
-        boolean yes = false;
-
-        if (character.equalsIgnoreCase("0")) {
-            yes = true;
-        }
-
-        return yes;
-    }
-
-    private String capitalize(String str) {
-        String capStr = "";
-        String[] split = str.split("");
-
-        split[0] = split[0].toUpperCase();
-
-        for (int i = 0; i < split.length; i++) {
-            capStr += split[i];
-        }
-
-        return capStr;
-    }
-
     public void testing() {
-        String name = "papa";
-
-        System.out.println(capitalize(name));
+        int t = 0;
+        
+        listContacts();
+        
+        System.out.print("Selec: ");
+        t = kb.nextInt() - 1;
+        
+        System.out.println(contactsList.get(t).getName());
     }
 
     @Override

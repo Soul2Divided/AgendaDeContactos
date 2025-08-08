@@ -1,5 +1,9 @@
 package agendadecontactos;
 
+/**
+ *
+ * @author gaby-
+ */
 public class Contact {
 
     private int id;
@@ -44,10 +48,6 @@ public class Contact {
 
     public String getEmail() {
         return email;
-    }
-
-    public void modifyId(int newId) {
-        this.id = newId;
     }
     
     public void modifyName(String newName) {
